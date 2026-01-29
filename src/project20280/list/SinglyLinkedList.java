@@ -105,17 +105,37 @@ public class SinglyLinkedList<E> implements List<E> {
     @Override
     public void add(int position, E e) {
         // TODO
+        if (position > size) {
+            throw new IllegalArgumentException("position can not be greater than size");
+        }
+
+        Node curr = head;
+        if (position == 0) {
+            curr = new Node(e, head);
+            head = curr;
+            return;
+        }
+        
+        for (int i = 0; i < position - 1; i++) {
+            curr = curr.getNext();
+        }
+
+        Node newNode = new Node(e, curr.getNext());
+        curr.setNext(newNode);
+
     }
 
 
     @Override
     public void addFirst(E e) {
         // TODO
+        add(0, e);
     }
 
     @Override
     public void addLast(E e) {
         // TODO
+        add(size, e);
     }
 
     @Override
