@@ -99,7 +99,7 @@ public class SinglyLinkedList<E> implements List<E> {
         for (int i = 0; i < position; i++) {
             curr = curr.getNext();
         }
-        return null;
+        return (E) curr.getElement();
     }
 
     @Override
@@ -143,7 +143,8 @@ public class SinglyLinkedList<E> implements List<E> {
     public E remove(int position) {
         // TODO
         if (position >= size) {
-            throw new IllegalArgumentException("position can not be greater or equal to size");
+            // throw new IllegalArgumentException("position can not be greater or equal to size");
+            return null;
         }
 
         size--;
