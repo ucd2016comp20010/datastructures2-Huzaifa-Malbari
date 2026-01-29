@@ -78,18 +78,27 @@ public class SinglyLinkedList<E> implements List<E> {
     //@Override
     public int size() {
         // TODO
-        return 0;
+        return size;
     }
 
     //@Override
     public boolean isEmpty() {
         // TODO
-        return false;
+        return head == null;
     }
 
     @Override
     public E get(int position) {
         // TODO
+
+        if (position >= size) {
+            throw new IllegalArgumentException("position can not be greater than or equal to size");
+        }
+        Node curr = head;
+
+        for (int i = 0; i < position; i++) {
+            curr = curr.getNext();
+        }
         return null;
     }
 
