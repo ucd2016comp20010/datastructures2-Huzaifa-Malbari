@@ -109,6 +109,7 @@ public class SinglyLinkedList<E> implements List<E> {
             throw new IllegalArgumentException("position can not be greater than size");
         }
 
+        size++;
         Node curr = head;
         if (position == 0) {
             curr = new Node(e, head);
@@ -141,19 +142,37 @@ public class SinglyLinkedList<E> implements List<E> {
     @Override
     public E remove(int position) {
         // TODO
-        return null;
+        if (position >= size) {
+            throw new IllegalArgumentException("position can not be greater or equal to size");
+        }
+
+        if (position == 0) {
+            E removed = head.getElement();
+            head = head.getNext();
+            return removed;
+        }
+
+        Node curr = head;
+        for (int i = 0; i < position - 1; i++) {
+            curr = curr.getNext();
+        }
+
+        E removed = (E) curr.getNext().getElement();
+        curr.setNext(curr.getNext().getNext());
+        
+        return removed;
     }
 
     @Override
     public E removeFirst() {
         // TODO
-        return null;
+        return remove(0);
     }
 
     @Override
     public E removeLast() {
         // TODO
-        return null;
+        return remove(size - 1);
     }
 
     //@Override
