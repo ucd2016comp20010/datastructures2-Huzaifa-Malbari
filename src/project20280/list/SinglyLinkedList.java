@@ -146,6 +146,7 @@ public class SinglyLinkedList<E> implements List<E> {
             throw new IllegalArgumentException("position can not be greater or equal to size");
         }
 
+        size--;
         if (position == 0) {
             E removed = head.getElement();
             head = head.getNext();
