@@ -9,7 +9,8 @@ public class DoublyLinkedList<E> implements List<E> {
     private static class Node<E> {
         private final E data;
         private Node<E> next;
-        private final Node<E> prev;
+        // private final Node<E> prev;
+        private Node<E> prev;
 
         public Node(E e, Node<E> p, Node<E> n) {
             data = e;
@@ -33,7 +34,8 @@ public class DoublyLinkedList<E> implements List<E> {
 
     private final Node<E> head;
     private final Node<E> tail;
-    private final int size = 0;
+    // private final int size = 0;
+    private int size = 0;
 
     public DoublyLinkedList() {
         head = new Node<E>(null, null, null);
@@ -43,6 +45,10 @@ public class DoublyLinkedList<E> implements List<E> {
 
     private void addBetween(E e, Node<E> pred, Node<E> succ) {
         // TODO
+        Node<E> newNode = new Node<E>(e, pred, succ);
+        pred.next = newNode;
+        succ.prev = newNode;
+        size++;
     }
 
     @Override
@@ -74,6 +80,20 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public void add(int i, E e) {
         // TODO
+
+        if (i > size) {
+            throw new IllegalArgumentException("position can not be greater than size");
+        }
+
+        Node<E> curr = head;
+        for (int index = 0; index < i; index++) {
+            curr = curr.getNext();
+        }
+
+        Node<E> newNode = new Node(e, curr, curr.getNext());
+        curr.getNext().prev = newNode;
+        curr.next = newNode;
+        size++;
     }
 
     @Override
@@ -135,11 +155,13 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public void addLast(E e) {
         // TODO
+        addBetween(e, tail.getPrev(), tail);
     }
 
     @Override
     public void addFirst(E e) {
         // TODO
+        addBetween(e, head, head.getNext());
     }
 
     public String toString() {
