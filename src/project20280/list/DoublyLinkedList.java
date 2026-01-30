@@ -90,16 +90,24 @@ public class DoublyLinkedList<E> implements List<E> {
             curr = curr.getNext();
         }
 
-        Node<E> newNode = new Node(e, curr, curr.getNext());
-        curr.getNext().prev = newNode;
-        curr.next = newNode;
+        addBetween(e, curr, curr.getNext());
         size++;
     }
 
     @Override
     public E remove(int i) {
         // TODO
-        return null;
+        if ((i >= size) || (i < 0)) {
+            return null;
+        }
+
+        Node curr = head;
+
+        for(int index = 0; index <= i; index++) {
+            curr = curr.getNext();
+        }
+
+        return (E) remove(curr);
     }
 
     private class DoublyLinkedListIterator<E> implements Iterator<E> {
@@ -125,7 +133,10 @@ public class DoublyLinkedList<E> implements List<E> {
 
     private E remove(Node<E> n) {
         // TODO
-        return null;
+        n.getPrev().next = n.getNext();
+        n.getNext().prev = n.getPrev();
+        size--;
+        return n.getData();
     }
 
     public E first() {
@@ -143,13 +154,13 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public E removeFirst() {
         // TODO
-        return null;
+        return remove(head.getNext());
     }
 
     @Override
     public E removeLast() {
         // TODO
-        return null;
+        return remove(tail.getPrev());
     }
 
     @Override
