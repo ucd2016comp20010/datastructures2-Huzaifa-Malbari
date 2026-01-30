@@ -48,19 +48,27 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public int size() {
         // TODO
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
         // TODO
-        return false;
+        return head.getNext() == tail;
     }
 
     @Override
     public E get(int i) {
         // TODO
-        return null;
+        if (i >= size) {
+            return null;
+        }
+        
+        Node<E> curr = head;
+        for (int index = 0; index <= i; index++) {
+            curr = curr.getNext();
+        }
+        return curr.getData();
     }
 
     @Override
