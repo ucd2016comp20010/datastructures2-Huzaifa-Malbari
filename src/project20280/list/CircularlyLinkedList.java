@@ -73,24 +73,111 @@ public class CircularlyLinkedList<E> implements List<E> {
 
         size++;
 
-        if (i == 0) {
-            tail = new Node<E>(e, null);
-            tail.setNext(tail);
+        // if (i == 0) {
+        //     Node newNode = new Node(e, null);
+        //     if (size == 1) {
+        //         newNode.setNext(newNode);
+        //         tail = newNode;
+        //     }else {
+        //         newNode.setNext(tail.getNext());
+        //         tail.setNext(newNode);
+        //     }
+        //     return;
+        // }else {
+
+        //     Node curr = tail;
+        //     for (int index = 0; index < i - 1; index++) {
+        //         curr = curr.getNext();
+        //     }
+
+        //     Node newNode = new Node(e, curr.getNext());
+        //     curr.setNext(newNode);
+        // }
+
+        if (i == size - 1) {
+            Node newNode = new Node(e, null);
+            if (size == 1) {
+                newNode.setNext(newNode);
+                tail = newNode;
+                return;
+            }
+            newNode.setNext(tail.getNext());
+            tail.setNext(newNode);
+            tail = newNode;
+            return;
         }
 
         Node curr = tail;
-        for (int index = 0; index < i - 1; index++) {
+        for (int index = 0; index < i; index++) {
             curr = curr.getNext();
         }
 
         Node newNode = new Node(e, curr.getNext());
         curr.setNext(newNode);
+
     }
 
     @Override
     public E remove(int i) {
         // TODO
-        return null;
+        if ((i < 0) || (i >= size)) {
+            return null;
+        }
+
+        size--;
+
+        // if (i == 0) {
+        //     E value = tail.getNext().getData();
+        //     if (size == 0) {
+        //         tail = null;
+        //         return value;
+        //     }
+            
+            // Node curr = tail;
+            // while (curr.getNext() != tail) {
+            //     curr = curr.getNext();
+            // }
+            // curr.setNext(tail.getNext());
+        //     tail.setNext(tail.getNext().getNext());
+        //     System.out.println("remove first");
+
+        //     return value;
+        // }
+
+        // Node<E> curr = tail;
+        // for (int index = 0; index < i; index++) {
+        //     curr = curr.getNext();
+        // }
+
+        // E value = curr.getNext().getData();
+        // curr.setNext(curr.getNext().getNext()); 
+
+        if (i == size) {
+            if (size == 0) {
+                E value = tail.getData();
+                tail = null;
+                return value;
+            }
+
+            E value = tail.getData();
+            Node curr = tail;
+            while (curr.getNext() != tail) {
+                curr = curr.getNext();
+            }
+            curr.setNext(tail.getNext());
+            tail = curr;
+            return value;
+        }
+
+        Node<E> curr = tail;
+        for (int index = 0; index < i; i++) {
+            curr = curr.getNext();
+        }
+
+        E value = curr.getNext().getData();
+        curr.setNext(curr.getNext().getNext());
+
+        return value;
     }
 
     public void rotate() {
@@ -127,13 +214,13 @@ public class CircularlyLinkedList<E> implements List<E> {
     @Override
     public E removeFirst() {
         // TODO
-        return null;
+        return remove(0);
     }
 
     @Override
     public E removeLast() {
         // TODO
-        return null;
+        return remove(size - 1);
     }
 
     @Override
