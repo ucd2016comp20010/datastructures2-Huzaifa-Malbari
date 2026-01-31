@@ -29,7 +29,8 @@ public class CircularlyLinkedList<E> implements List<E> {
     }
 
     private final Node<E> tail = null;
-    private final int size = 0;
+    // private final int size = 0;
+    private int size = 0;
 
     public CircularlyLinkedList() {
 
@@ -43,9 +44,16 @@ public class CircularlyLinkedList<E> implements List<E> {
     @Override
     public E get(int i) {
         // TODO
-        return null;
-    }
+        if ((i < 0) || (i >= size)) {
+            return null;
+        }
 
+        Node<E> curr = tail;
+        for (int index = 0; index < i; index++) {
+            curr = curr.getNext();
+        }
+        return curr.getData();
+    }
     /**
      * Inserts the given element at the specified index of the list, shifting all
      * subsequent elements in the list one position further to make room.
