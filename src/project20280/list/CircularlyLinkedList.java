@@ -4,6 +4,8 @@ import project20280.interfaces.List;
 
 import java.util.Iterator;
 
+import org.junit.platform.engine.support.hierarchical.Node;
+
 public class CircularlyLinkedList<E> implements List<E> {
 
     private class Node<T> {
@@ -28,7 +30,8 @@ public class CircularlyLinkedList<E> implements List<E> {
         }
     }
 
-    private final Node<E> tail = null;
+    // private final Node<E> tail = null;
+    private Node<E> tail = null;
     // private final int size = 0;
     private int size = 0;
 
@@ -64,6 +67,24 @@ public class CircularlyLinkedList<E> implements List<E> {
     @Override
     public void add(int i, E e) {
         // TODO
+        if ((i < 0) || (i > size)) {
+            throw new IllegalArgumentException("i can not be less than zero or greater than size");
+        }
+
+        size++;
+
+        if (i == 0) {
+            tail = new Node<E>(e, null);
+            tail.setNext(tail);
+        }
+
+        Node curr = tail;
+        for (int index = 0; index < i - 1; index++) {
+            curr = curr.getNext();
+        }
+
+        Node newNode = new Node(e, curr.getNext());
+        curr.setNext(newNode);
     }
 
     @Override
@@ -118,11 +139,13 @@ public class CircularlyLinkedList<E> implements List<E> {
     @Override
     public void addFirst(E e) {
         // TODO
+        add(0, e);
     }
 
     @Override
     public void addLast(E e) {
         // TODO
+        add(size, e);
     }
 
 
