@@ -211,6 +211,38 @@ public class SinglyLinkedList<E> implements List<E> {
         return sb.toString();
     }
 
+    public SinglyLinkedList<E> sortedMerge(SinglyLinkedList<E> l2) {
+        SinglyLinkedList<E> merged = l2.clone();
+        
+        Node<E> curr = head;
+        int i = 0;
+        while (curr != null) {
+            Comparable thisE = (Comparable) curr.getElement();
+            Comparable thatE = (Comparable) merged.get(i);
+            while((thisE.compareTo(thatE) > 0) && (i < merged.size())) {
+                i++;
+                thatE = (Comparable) merged.get(i);
+            }
+            merged.add(i, curr.getElement());
+            curr = curr.getNext();
+        }
+        
+        return merged;
+        
+    }
+
+    public SinglyLinkedList<E> clone() {
+        SinglyLinkedList<E> clone = new SinglyLinkedList<E>();
+
+        Node<E> curr = head;
+        while (curr != null) {
+            clone.addLast(curr.getElement());
+            curr = curr.getNext();
+        }
+
+        return clone;
+    }
+
     public static void main(String[] args) {
         SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
         System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
@@ -230,5 +262,18 @@ public class SinglyLinkedList<E> implements List<E> {
         ll.remove(5);
         System.out.println(ll);
 
+        SinglyLinkedList<Integer> odds = new SinglyLinkedList<Integer>();
+        SinglyLinkedList<Integer> evens = new SinglyLinkedList<Integer>();
+        
+        for (int i = 1; i < 10; i+=2) {
+            odds.addLast(i);
+        }
+
+        for (int i = 2; i <= 10; i+=2) {
+            evens.addLast(i);
+        }
+
+        SinglyLinkedList<Integer> merged = odds.sortedMerge(evens);
+        System.out.println(merged);
     }
 }
