@@ -182,6 +182,7 @@ public class CircularlyLinkedList<E> implements List<E> {
 
     public void rotate() {
         // TODO
+        tail = tail.getNext();
     }
 
     private class CircularlyLinkedListIterator<E> implements Iterator<E> {
