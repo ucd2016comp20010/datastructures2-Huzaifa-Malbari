@@ -47,12 +47,12 @@ public class CircularlyLinkedList<E> implements List<E> {
     @Override
     public E get(int i) {
         // TODO
-        if ((i < 0) || (i >= size)) {
-            return null;
+        if (i == size - 1) {
+            return tail.getData();
         }
 
         Node<E> curr = tail;
-        for (int index = 0; index < i; index++) {
+        for (int index = 0; index <= i; index++) {
             curr = curr.getNext();
         }
         return curr.getData();
