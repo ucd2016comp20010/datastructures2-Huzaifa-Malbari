@@ -1,16 +1,21 @@
 package project20280.stacksqueues;
 
+import java.util.Arrays;
+
 import project20280.interfaces.Queue;
 
 public class ArrayQueue<E> implements Queue<E> {
 
     private static final int CAPACITY = 1000;
     private E[] data;
-    private final int front = 0;
-    private final int size = 0;
+    // private final int front = 0;
+    // private final int size = 0;
+    private int front = 0;
+    private int size = 0;
 
     public ArrayQueue(int capacity) {
         // TODO
+        data = (E[]) new Object[capacity];
 
     }
 
@@ -32,6 +37,27 @@ public class ArrayQueue<E> implements Queue<E> {
     @Override
     public void enqueue(E e) {
         // TODO
+        // int last = Math.max(0, (front + size - 1)%CAPACITY); 
+        // if (last == front - 1) {
+        //     data = Arrays.copyOf(data, (int) Math.round(CAPACITY * 1.6));
+        // }
+
+        // data[last] = e;
+        // size++;
+
+        if (size == 0) {
+            data[front] = e;
+            size++;
+            return;
+        }
+
+        if (size == CAPACITY - 1) {
+            data = Arrays.copyOf(data, (int) Math.round(CAPACITY * 1.6));
+        }
+
+        int last = (front + size -1)%CAPACITY;
+        data[last + 1] = e;
+        size++;
     }
 
     @Override
@@ -42,7 +68,10 @@ public class ArrayQueue<E> implements Queue<E> {
     @Override
     public E dequeue() {
         // TODO
-        return null;
+        E dataE = first();
+        front++;
+        size--;
+        return dataE;
     }
 
     public String toString() {
