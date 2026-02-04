@@ -243,6 +243,23 @@ public class SinglyLinkedList<E> implements List<E> {
         return clone;
     }
 
+    public void reverse() {
+        Node prev = null;
+        Node curr = head;
+        Node next;
+
+        while(curr != null) {
+            next = curr.getNext();
+            // next.setNext(curr);
+            curr.setNext(prev);
+
+            prev = curr;
+            curr = next;
+        }
+
+        head = prev;
+    }
+
     public static void main(String[] args) {
         SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
         System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
@@ -274,6 +291,9 @@ public class SinglyLinkedList<E> implements List<E> {
         }
 
         SinglyLinkedList<Integer> merged = odds.sortedMerge(evens);
+        System.out.println(merged);
+
+        merged.reverse();
         System.out.println(merged);
     }
 }
