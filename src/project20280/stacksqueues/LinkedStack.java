@@ -12,6 +12,7 @@ public class LinkedStack<E> implements Stack<E> {
 
     public LinkedStack() {
         // TODO
+        ll = new DoublyLinkedList<E>();
     }
 
     @Override
@@ -27,6 +28,7 @@ public class LinkedStack<E> implements Stack<E> {
     @Override
     public void push(E e) {
         // TODO
+        ll.add(size(), e);
     }
 
     @Override
