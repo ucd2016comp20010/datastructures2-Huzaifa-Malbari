@@ -28,19 +28,21 @@ public class LinkedStack<E> implements Stack<E> {
     @Override
     public void push(E e) {
         // TODO
-        ll.add(size(), e);
+        ll.addFirst(e);
     }
 
     @Override
     public E top() {
         // TODO
-        return null;
+        return ll.get(0);
     }
 
     @Override
     public E pop() {
         // TODO
-        return null;
+        E data = top();
+        ll.removeFirst();
+        return data;
     }
 
     public String toString() {
