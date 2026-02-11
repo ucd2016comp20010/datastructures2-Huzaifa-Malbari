@@ -5,6 +5,8 @@ import project20280.interfaces.Position;
 import java.util.ArrayList;
 // import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
+import javax.management.RuntimeErrorException;
+
 /**
  * Concrete implementation of a binary tree using a node-based, linked
  * structure.
@@ -154,7 +156,13 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     public Position<E> addRoot(E e) throws IllegalStateException {
         // TODO
-        return null;
+        if (root != null) {
+            throw new IllegalStateException("Tree is not empty");
+        }
+
+        root = createNode(e, null, null, null);
+        size++;
+        return root;
     }
 
     public void insert(E e) {
@@ -180,7 +188,17 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     public Position<E> addLeft(Position<E> p, E e) throws IllegalArgumentException {
         // TODO
-        return null;
+        if (!(p instanceof Node<E>)) {
+            throw new IllegalArgumentException("p not a node");
+        }
+        Node<E> pnode = (Node<E>) p;
+        if (pnode.getLeft() != null){
+            throw new IllegalArgumentException("p already has left child");
+        }
+
+        pnode.setLeft(createNode(e, pnode, null, null));
+        size++;
+        return pnode.getLeft();
     }
 
     /**
@@ -195,7 +213,17 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
      */
     public Position<E> addRight(Position<E> p, E e) throws IllegalArgumentException {
         // TODO
-        return null;
+        if (!(p instanceof Node<E>)) {
+            throw new IllegalArgumentException("p not a node");
+        }
+        Node<E> pnode = (Node<E>) p;
+        if (pnode.getRight() != null){
+            throw new IllegalArgumentException("p already has right child");
+        }
+
+        pnode.setRight(createNode(e, pnode, null, null));
+        size++;
+        return pnode.getRight();
     }
 
     /**
