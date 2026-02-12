@@ -28,7 +28,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
     @Override
     public boolean isInternal(Position<E> p) {
         // TODO
-        return false;
+        return numChildren(p) == 0;
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
     @Override
     public boolean isExternal(Position<E> p) {
         // TODO
-        return false;
+        return !isInternal(p);
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
     @Override
     public boolean isRoot(Position<E> p) {
         // TODO
-        return false;
+        return p == root();
     }
 
     /**
@@ -66,7 +66,11 @@ public abstract class AbstractTree<E> implements Tree<E> {
     @Override
     public int numChildren(Position<E> p) {
         // TODO
-        return 0;
+        int children = 0;
+        for (Position<E> c : children(p)) {
+            children++;
+        }
+        return children;
     }
 
     /**
@@ -88,7 +92,8 @@ public abstract class AbstractTree<E> implements Tree<E> {
      */
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+//        return size() == 0;
+        return root() == null;
     }
 
     //---------- support for computing depth of nodes and height of (sub)trees ----------
@@ -119,7 +124,11 @@ public abstract class AbstractTree<E> implements Tree<E> {
 
     public int height_recursive(Position<E> p) {
         // TODO
-        return 0;
+        int h = 0;
+        for (Position<E> c : children(p)) {
+            h = Math.max(h, 1 + height_recursive(c));
+        }
+        return h;
     }
 
     /**
@@ -181,6 +190,10 @@ public abstract class AbstractTree<E> implements Tree<E> {
      */
     private void preorderSubtree(Position<E> p, List<Position<E>> snapshot) {
         // TODO
+        snapshot.add(p);
+        for (Position<E> c : children(p)) {
+            preorderSubtree(c, snapshot);
+        }
     }
 
     /**
@@ -190,7 +203,11 @@ public abstract class AbstractTree<E> implements Tree<E> {
      */
     public Iterable<Position<E>> preorder() {
         // TODO
-        return null;
+        List<Position<E>> snapshot = new ArrayList<Position<E>>();
+        if (!isEmpty()) {
+            preorderSubtree(root(), snapshot);
+        }
+        return snapshot;
     }
 
     /**
