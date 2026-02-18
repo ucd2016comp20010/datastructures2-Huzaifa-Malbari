@@ -2,6 +2,7 @@ package project20280.tree;
 
 import project20280.interfaces.Position;
 import project20280.interfaces.Tree;
+import project20280.stacksqueues.LinkedQueue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -219,6 +220,10 @@ public abstract class AbstractTree<E> implements Tree<E> {
      */
     private void postorderSubtree(Position<E> p, List<Position<E>> snapshot) {
         // TODO
+        for (Position<E> c : children(p)) {
+            postorderSubtree(c, snapshot);
+        }
+        snapshot.add(p);
     }
 
     /**
@@ -240,6 +245,17 @@ public abstract class AbstractTree<E> implements Tree<E> {
      */
     public Iterable<Position<E>> breadthfirst() {
         // TODO
-        return null;
+        ArrayList<Position<E>> snapshot = new ArrayList<Position<E>>();
+        LinkedQueue<Position<E>> queue = new LinkedQueue<Position<E>>();
+
+        queue.enqueue(root());
+        while (!queue.isEmpty()) {
+            Position<E> curr = queue.dequeue();
+            snapshot.add(curr);
+            for (Position<E> c : children(curr)) {
+                queue.enqueue(c);
+            }
+        }
+        return snapshot;
     }
 }
