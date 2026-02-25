@@ -3,6 +3,7 @@ package project20280.tree;
 import project20280.interfaces.Position;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 // import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import javax.management.RuntimeErrorException;
@@ -61,6 +62,13 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         String[] arr = { "A", "B", "C", "D", "E", null, "F", null, null, "G", "H", null, null, null, null };
         bt.createLevelOrder(arr);
         System.out.println(bt.toBinaryTreeString());
+
+        Integer [] inorder= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+        Integer [] preorder= {18, 2, 1, 14, 13, 12, 4, 3, 9, 6, 5, 8, 7, 10, 11, 15, 16, 17, 28, 23, 19, 22, 20, 21, 24, 27, 26, 25, 29, 30};
+
+        LinkedBinaryTree <Integer> bt1 = new LinkedBinaryTree <>();
+        bt1.construct(inorder , preorder);
+        System.out.println(bt1.toBinaryTreeString ());
     }
 
 
@@ -318,6 +326,48 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
             return n;
         }
         return null;
+    }
+
+    public void construct(E[] inorder, E[] preorder) {
+        root = constructHelper(inorder, preorder, 0,0, inorder.length - 1);
+    }
+
+    private Node<E> constructHelper(E[] inorder, E[] preorder, int s, int i, int e) {
+
+        int rootidx = s;
+        while ((rootidx < e) && !(inorder[rootidx].equals(preorder[i])) ) {
+            rootidx++;
+        }
+
+        //leaf node
+        if ((rootidx == s) && (rootidx == e)) {
+            return createNode(preorder[i], null, null, null);
+        }
+
+        Node<E> thisRoot = createNode(preorder[i], null, null, null);
+        if ((rootidx > s) && (i + 1 < preorder.length)) {
+            Node<E> left = constructHelper(inorder, preorder, s, i + 1, rootidx - 1);
+            left.setParent(thisRoot);
+            thisRoot.setLeft(left);
+        }
+
+        if (rootidx < e) {
+            Node<E> right = constructHelper(inorder, preorder, rootidx + 1, i + rootidx - s + 1, e);
+            right.setParent(thisRoot);
+            thisRoot.setRight(right);
+        }
+//        if (rootidx < e) {
+//            int rightRoot = i;
+//            while ((rightRoot < preorder.length) && (preorder[rightRoot] != inorder[rootidx + 1])) {
+//                rightRoot++;
+//            }
+//            Node<E> right = constructHelper(inorder, preorder, rootidx + 1, rightRoot, e);
+//            right.setParent(thisRoot);
+//            thisRoot.setRight(right);
+//        }
+
+
+        return thisRoot;
     }
 
     public String toBinaryTreeString() {
