@@ -260,6 +260,32 @@ public class SinglyLinkedList<E> implements List<E> {
         head = prev;
     }
 
+    public void recreverse() {
+        head = reverseHelper(null, head);
+    }
+
+    private Node<E> reverseHelper(Node<E> pred, Node<E> curr) {
+        if (curr == null) {
+            return pred;
+        }
+        Node<E> head = reverseHelper(curr, curr.getNext());
+        curr.setNext(pred);
+        return head;
+    }
+
+    public SinglyLinkedList<E> recursiveCopy() {
+        SinglyLinkedList<E> ll = new SinglyLinkedList<E>();
+        ll.head = copyHelper(head);
+        return ll;
+    }
+
+    private Node<E> copyHelper(Node<E> node) {
+        if (node == null) {
+            return null;
+        }
+        return new Node<E> (node.getElement(), copyHelper(node.next));
+    }
+
     public static void main(String[] args) {
         SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
         System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
@@ -295,5 +321,9 @@ public class SinglyLinkedList<E> implements List<E> {
 
         merged.reverse();
         System.out.println(merged);
+        merged.recreverse();
+        System.out.println(merged);
+        System.out.println(merged.recursiveCopy());
+        System.out.println(merged.recursiveCopy() == merged);
     }
 }
