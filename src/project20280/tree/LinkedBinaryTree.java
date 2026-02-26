@@ -1,6 +1,8 @@
 package project20280.tree;
 
 import project20280.interfaces.Position;
+import project20280.interfaces.List;
+import project20280.list.SinglyLinkedList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +71,7 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         LinkedBinaryTree <Integer> bt1 = new LinkedBinaryTree <>();
         bt1.construct(inorder , preorder);
         System.out.println(bt1.toBinaryTreeString ());
+        bt1.printLeaves();
     }
 
 
@@ -368,6 +371,26 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
 
         return thisRoot;
+    }
+
+    public void printLeaves() {
+        SinglyLinkedList<E> snapshot = new SinglyLinkedList<E>();
+        printLeavesHelper(root, snapshot);
+        System.out.println(snapshot);
+    }
+
+    private void printLeavesHelper(Node<E> node, List<E> snapshot) {
+        if (numChildren(node) == 0) {
+            snapshot.addLast(node.getElement());
+            return;
+        }
+        if (node.getLeft() != null) {
+            printLeavesHelper(node.getLeft(), snapshot);
+        }
+        if (node.getRight() != null) {
+            printLeavesHelper(node.getRight(), snapshot);
+        }
+        return;
     }
 
     public String toBinaryTreeString() {
