@@ -44,6 +44,10 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     public HeapPriorityQueue(K[] keys, V[] values) {
         // TODO
+        for (int i = 0; i < keys.length; i++) {
+            heap.add(new PQEntry<>(keys[i], values[i]));
+        }
+        heapify();
     }
 
     // protected utilities
@@ -120,6 +124,16 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void heapify() {
         // TODO
+        int len = heap.size();
+        int numPerLayer =  len - (int) Math.pow(2, Math.floor(Math.log(len)/Math.log(2))) + 1;
+        len -= numPerLayer;
+        while (len != 0) {
+            numPerLayer =  len - (int) Math.pow(2, Math.floor(Math.log(len)/Math.log(2))) + 1;
+            for (int i = 0; i < numPerLayer; i++) {
+                downheap(len - numPerLayer + i);
+            }
+            len -= numPerLayer;
+        }
     }
 
     // public methods
@@ -202,11 +216,11 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 
     public static void main(String[] args) {
         Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
-//        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
-        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>();
-        for (int i = 0; i < rands.length; i++) {
-            pq.insert(rands[i], rands[i]);
-        }
+        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
+//        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>();
+//        for (int i = 0; i < rands.length; i++) {
+//            pq.insert(rands[i], rands[i]);
+//        }
 
         System.out.println("elements: " + rands);
         System.out.println("after adding elements: " + pq);
@@ -215,6 +229,9 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 
         pq.removeMin();
         System.out.println("after removeMin: " + pq);
+//        while (pq.size() != 0) {
+//            System.out.println(pq.removeMin());
+//        }
         // [             1,
         //        2,            4,
         //   23,     21,      5, 12,
