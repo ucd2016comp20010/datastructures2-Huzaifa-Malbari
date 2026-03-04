@@ -69,7 +69,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 
     protected boolean hasRight(int j) {
         // TODO
-        return right(j) >= size();
+        return !(right(j) >= size());
     }
 
     /**
