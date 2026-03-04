@@ -49,27 +49,27 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     // protected utilities
     protected int parent(int j) {
         // TODO
-        return 0;
+        return (j - 1)/2;
     }
 
     protected int left(int j) {
         // TODO
-        return 0;
+        return 2*j + 1;
     }
 
     protected int right(int j) {
         // TODO
-        return 0;
+        return 2*j + 2;
     }
 
     protected boolean hasLeft(int j) {
         // TODO
-        return false;
+        return !(left(j) >= size());
     }
 
     protected boolean hasRight(int j) {
         // TODO
-        return false;
+        return right(j) >= size();
     }
 
     /**
@@ -77,6 +77,9 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void swap(int i, int j) {
         // TODO
+        Entry<K, V> temp = heap.get(i);
+        heap.set(i, heap.get(j));
+        heap.set(j, temp);
     }
 
     /**
@@ -85,6 +88,13 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void upheap(int j) {
         // TODO
+        if (j == 0) {
+            return;
+        }
+        if (compare(heap.get(j), heap.get(parent(j))) < 0) {
+            swap(j, parent(j));
+            upheap(parent(j));
+        }
     }
 
     /**
@@ -92,6 +102,17 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void downheap(int j) {
         // TODO
+        if (!hasLeft(j)) {
+            return;
+        }
+        int smallest = left(j);
+        if (hasRight(j)) {
+            smallest = (compare(heap.get(smallest), heap.get(right(j))) <= 0) ? smallest : right(j);
+        }
+        if (compare(heap.get(j), heap.get(smallest)) > 0) {
+            swap(j, smallest);
+            downheap(smallest);
+        }
     }
 
     /**
@@ -134,6 +155,8 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     @Override
     public Entry<K, V> insert(K key, V value) throws IllegalArgumentException {
         // TODO
+        heap.add(new PQEntry<>(key, value));
+        upheap(size() - 1);
         return null;
     }
 
@@ -145,7 +168,10 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     @Override
     public Entry<K, V> removeMin() {
         // TODO
-        return null;
+        swap(0, size() - 1);
+        Entry<K, V> ent = heap.removeLast();
+        downheap(0);
+        return ent;
     }
 
     public String toString() {
@@ -176,7 +202,11 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 
     public static void main(String[] args) {
         Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
-        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
+//        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
+        HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>();
+        for (int i = 0; i < rands.length; i++) {
+            pq.insert(rands[i], rands[i]);
+        }
 
         System.out.println("elements: " + rands);
         System.out.println("after adding elements: " + pq);
