@@ -70,6 +70,7 @@ public class ArrayQueue<E> implements Queue<E> {
         // TODO
         E dataE = first();
         front++;
+        front %= CAPACITY;
         size--;
         return dataE;
     }
