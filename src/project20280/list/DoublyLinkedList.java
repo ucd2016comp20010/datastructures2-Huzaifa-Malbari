@@ -134,7 +134,9 @@ public class DoublyLinkedList<E> implements List<E> {
     private E remove(Node<E> n) {
         // TODO
         n.getPrev().next = n.getNext();
-        n.getNext().prev = n.getPrev();
+        if (n.getNext() != null) {
+            n.getNext().prev = n.getPrev();
+        }
         size--;
         return n.getData();
     }
