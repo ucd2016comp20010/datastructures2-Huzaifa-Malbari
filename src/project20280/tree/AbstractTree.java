@@ -19,6 +19,8 @@ import java.util.List;
  */
 public abstract class AbstractTree<E> implements Tree<E> {
 
+    public int heightFunctionCalls = 0;
+
     /**
      * Returns true if Position p has one or more children.
      *
@@ -125,6 +127,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
 
     public int height_recursive(Position<E> p) {
         // TODO
+        heightFunctionCalls++;
         int h = 0;
         for (Position<E> c : children(p)) {
             h = Math.max(h, 1 + height_recursive(c));
