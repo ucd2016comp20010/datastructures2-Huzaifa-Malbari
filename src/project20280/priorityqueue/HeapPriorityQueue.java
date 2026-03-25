@@ -16,6 +16,7 @@ import java.util.Comparator;
 public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
 
     protected ArrayList<Entry<K, V>> heap = new ArrayList<>();
+    int size = 0;
 
     /**
      * Creates an empty priority queue based on the natural ordering of its keys.
@@ -47,6 +48,7 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         for (int i = 0; i < keys.length; i++) {
             heap.add(new PQEntry<>(keys[i], values[i]));
         }
+        size = keys.length;
         heapify();
     }
 
@@ -136,6 +138,15 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         }
     }
 
+    public void heapsort() {
+        heapify();
+        int len = heap.size();
+        for (int i = len - 1; i > 0; i--) {
+            Entry rem = removeMin();
+            heap.set(i, rem);
+        }
+    }
+
     // public methods
 
     /**
@@ -145,7 +156,8 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     @Override
     public int size() {
-        return heap.size();
+        return size;
+//        return heap.size();
     }
 
     /**
@@ -183,7 +195,8 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     public Entry<K, V> removeMin() {
         // TODO
         swap(0, size() - 1);
-        Entry<K, V> ent = heap.removeLast();
+        Entry<K, V> ent = heap.get(size() - 1);
+        size--;
         downheap(0);
         return ent;
     }
