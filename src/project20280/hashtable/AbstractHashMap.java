@@ -83,7 +83,12 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public V remove(K key) {
-        return bucketRemove(hashValue(key), key);
+        V val = bucketRemove(hashValue(key), key);
+
+        if (val != null) {
+            n--;
+        }
+        return val;
     }
 
     /**
@@ -99,7 +104,12 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V put(K key, V value) {
         // TODO
-        return null;
+        V val = bucketPut(hashValue(key), key, value);
+
+        if (val == null) {
+            n++;
+        }
+        return val;
     }
 
     // private utilities
@@ -109,7 +119,7 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     private int hashValue(K key) {
         // TODO
-        return 0;
+        return (int) (( Math.abs(key.hashCode() * scale + shift) % prime ) % capacity);
     }
 
     /**
@@ -117,6 +127,10 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     private void resize(int newCap) {
         // TODO
+        if (newCap == capacity) {
+           return;
+        }
+
     }
 
     // protected abstract methods to be implemented by subclasses
