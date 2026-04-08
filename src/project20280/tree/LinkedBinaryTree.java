@@ -292,27 +292,47 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         // TODO
         validate(p);
         Node<E> pnode = (Node<E>) p;
-        if ((pnode.getLeft() != null) && (pnode.getRight() != null)) {
+        if (numChildren(p) == 2) {
             throw new IllegalArgumentException("p has 2 children");
         }
 
-        Node<E> parent = (pnode.getParent() == null) ? root : pnode.getParent();
+        Node<E> parent = pnode.getParent();
 
-        if (parent.getLeft() == pnode) {
-            if (pnode.getLeft() != null) {
-                parent.setLeft(pnode.getLeft());
-            }else if (pnode.getRight() != null) {
-                parent.setLeft(pnode.getRight());
+        pnode.setParent(null);
+        if (numChildren(p) == 0) {
+
+            if (p == root) {
+                root = null;
+            }else if (parent.getLeft() == pnode) {
+                parent.setLeft(null);
+            }else {
+                parent.setRight(null);
             }
 
         }else {
-            if (pnode.getLeft() != null) {
-                parent.setRight(pnode.getLeft());
-            }else if (pnode.getRight() != null) {
-                parent.setRight(pnode.getRight());
+
+            Node<E> child = (Node<E>) children(p).iterator().next();
+
+            if (left(pnode) == child) {
+                pnode.setLeft(null);
+            }else {
+                pnode.setRight(null);
             }
-            
+
+            if (pnode == root) {
+                child.setParent(null);
+                root = child;
+            }else {
+                child.setParent(parent);
+
+                if (left(parent) == pnode) {
+                    parent.setLeft(child);
+                }else {
+                    parent.setRight(child);
+                }
+            }
         }
+
         size--;
         return pnode.getElement();
     }
