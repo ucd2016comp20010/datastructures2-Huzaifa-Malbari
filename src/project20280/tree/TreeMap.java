@@ -1,5 +1,6 @@
 package project20280.tree;
 
+import project20280.interfaces.BinaryTree;
 import project20280.interfaces.Entry;
 import project20280.interfaces.Position;
 
@@ -62,6 +63,12 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
          */
         private void relink(Node<Entry<K, V>> parent, Node<Entry<K, V>> child, boolean makeLeftChild) {
             // TODO
+            parent.setParent(child);
+            if (makeLeftChild) {
+                child.setLeft(parent);
+            }else {
+                child.setRight(parent);
+            }
         }
 
         /**
@@ -80,6 +87,41 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
          */
         public void rotate(Position<Entry<K, V>> p) {
             // TODO
+            BSTNode node = (BSTNode) p;
+            BSTNode parent = (BSTNode) parent(p);
+            if (p == left(parent)) {
+                parent.setLeft(null);
+                if (right(p) != null) {
+                    BSTNode rightChild = (BSTNode) right(node);
+                    rightChild.setParent(parent);
+                    parent.setLeft(rightChild);
+                }
+                node.setRight(parent);
+
+            }else {
+                parent.setRight(null);
+                if (left(p) != null) {
+                    BSTNode leftChild = (BSTNode) left(node);
+                    leftChild.setParent(parent);
+                    parent.setRight(leftChild);
+                }
+                node.setLeft(parent);
+
+            }
+
+            if (parent.getParent() != null) {
+                node.setParent(parent.getParent());
+                BSTNode grand = ((BSTNode) parent(parent));
+                if (left(grand) == parent) {
+                    grand.setLeft(node);
+                }else {
+                    grand.setRight(node);
+                }
+            }else {
+                root = node;
+                node.setParent(null);
+            }
+            parent.setParent(node);
         }
 
         /**
@@ -112,7 +154,28 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
          */
         public Position<Entry<K, V>> restructure(Position<Entry<K, V>> x) {
             // TODO
-            return null;
+            BSTNode node = (BSTNode) x;
+            BSTNode parent = (BSTNode) parent(x);
+            BSTNode grand = (BSTNode) parent(parent);
+
+            if (left(parent) == node) {
+                if (left(grand) == parent) {
+                    rotate(parent);
+                    return parent;
+                }
+                rotate(node);
+                rotate(node);
+                return node;
+            }
+
+            if (right(grand) == parent) {
+                rotate(parent);
+                return parent;
+            }
+
+            rotate(node);
+            rotate(node);
+            return node;
         }
     } // ----------- end of nested BalanceableBinaryTree class -----------
 
@@ -343,6 +406,7 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
         if (compare(key, p.getElement()) > 0) {
             tree.addRight(p, new MapEntry<>(key, value));
         }
+        rebalanceInsert(p);
         return null;
     }
 
@@ -375,8 +439,11 @@ public class TreeMap<K, V> extends AbstractSortedMap<K, V> {
         LinkedBinaryTree.Node<Entry<K, V>> furthestRight = (LinkedBinaryTree.Node<Entry<K, V>>) treeMax(child);
         Entry<K, V> removeEntry = p.getElement();
         p.setElement(furthestRight.getElement());
-        furthestRight.setElement(removeEntry);
-        return tree.remove(furthestRight).getValue();
+
+        LinkedBinaryTree.Node<Entry<K, V>> furthestRightParent = (LinkedBinaryTree.Node<Entry<K, V>>) furthestRight.getParent();
+        tree.remove(furthestRight);
+        rebalanceDelete(furthestRightParent);
+        return removeEntry.getValue();
     }
 
     // additional behaviors of the SortedMap interface

@@ -32,7 +32,8 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      */
     protected int height(Position<Entry<K, V>> p) {
         // TODO
-        return 0;
+        BalanceableBinaryTree.BSTNode node = (BalanceableBinaryTree.BSTNode) p;
+        return node.getAux();
     }
 
     /**
@@ -40,6 +41,15 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      */
     protected void recomputeHeight(Position<Entry<K, V>> p) {
         // TODO
+        int maxHeight = 0;
+        if (isExternal(p)) {
+            ((BalanceableBinaryTree.BSTNode<Entry<K,V>>) p).setAux(0);
+            return;
+        }
+        for (Position child : tree.children(p)) {
+            maxHeight = Math.max(maxHeight, height(child));
+        }
+        ((BalanceableBinaryTree.BSTNode<Entry<K,V>>) p).setAux(maxHeight + 1);
     }
 
     /**
@@ -47,7 +57,15 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      */
     protected boolean isBalanced(Position<Entry<K, V>> p) {
         // TODO
-        return false;
+        if (isExternal(p)) {
+            return true;
+        }
+
+        if (tree.numChildren(p) == 1) {
+            return height(tree.children(p).iterator().next()) <= 1;
+        }
+
+        return Math.abs(height(left(p)) - height(right(p))) <= 1;
     }
 
     /**
@@ -55,7 +73,17 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      */
     protected Position<Entry<K, V>> tallerChild(Position<Entry<K, V>> p) {
         // TODO
-        return null;
+        BalanceableBinaryTree.BSTNode<Entry<K, V>> node = (BalanceableBinaryTree.BSTNode<Entry<K,V>>) p;
+
+        if (isExternal(p)) {
+            return null;
+        }
+
+        if (tree.numChildren(p) == 1) {
+            return tree.children(p).iterator().next();
+        }
+
+        return (height(left(p)) >= height(right(p))) ? left(p) : right(p);
     }
 
     /**
@@ -65,6 +93,20 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
      */
     protected void rebalance(Position<Entry<K, V>> p) {
         // TODO
+        int oldHeight, newHeight;
+        do {
+            oldHeight = height(p); // not yet recalculated if internal
+            if (!isBalanced(p)) { // imbalance detected
+                // perform trinode restructuring, setting p to resulting root,
+                // and recompute new local heights after the restructuring
+                p = restructure(tallerChild(tallerChild(p)));
+                recomputeHeight(tree.left(p));
+                recomputeHeight(tree.right(p));
+            }
+            recomputeHeight(p);
+            newHeight = height(p);
+            p = tree.parent(p);
+        } while (oldHeight != newHeight && p != null);
     }
 
     /**
@@ -81,6 +123,7 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
     @Override
     protected void rebalanceDelete(Position<Entry<K, V>> p) {
         // TODO
+        rebalance(p);
     }
 
     /**
@@ -119,6 +162,13 @@ public class AVLTreeMap<K, V> extends TreeMap<K, V> {
 
         avl.remove(5);
         System.out.println(avl.toBinaryTreeString());
+
+        AVLTreeMap map = new AVLTreeMap();
+        for (int i = 1; i < 100; i++) {
+            map.put(i, i);
+        }
+
+        System.out.println(map.toBinaryTreeString());
 
     }
 }

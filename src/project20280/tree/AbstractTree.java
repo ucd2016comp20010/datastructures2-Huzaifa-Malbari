@@ -31,7 +31,7 @@ public abstract class AbstractTree<E> implements Tree<E> {
     @Override
     public boolean isInternal(Position<E> p) {
         // TODO
-        return numChildren(p) == 0;
+        return numChildren(p) != 0;
     }
 
     /**
